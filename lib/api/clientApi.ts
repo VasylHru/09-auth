@@ -35,11 +35,11 @@ export const register = async (credentials: {
   return data;
 };
 
-export const login = async (credentials: {
+export const login = async (payload: {
   email: string;
   password: string;
 }) => {
-  const { data } = await api.post<User>("/auth/login", credentials);
+  const { data } = await api.post<User>("/auth/login", payload);
   return data;
 };
 
