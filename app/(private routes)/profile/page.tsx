@@ -10,7 +10,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Profile",
     description: "User profile page",
-    url: "https://your-vercel-domain.vercel.app/profile",
+    url: "https://09-auth-kohl-six.vercel.app//profile",
   },
 };
 
