@@ -19,6 +19,7 @@ export interface DeleteNoteResponse {
 }
 
 export interface RegisterParams {
+  name?:string ;
   email: string;
   password: string;
 }
@@ -71,10 +72,10 @@ export async function deleteNote(id: string): Promise<DeleteNoteResponse> {
   return response.data;
 }
 
-export async function register(data: RegisterParams): Promise<User> {
-  const response = await api.post<User>("/auth/register", data);
-  return response.data;
-}
+// export async function register(data: RegisterParams): Promise<User> {
+//   const response = await api.post<User>("/auth/register", data);
+//   return response.data;
+// }
 
 export async function login(data: LoginParams): Promise<User> {
   const response = await api.post<User>("/auth/login", data);
@@ -122,13 +123,13 @@ export async function updateMe(data: UpdateMeParams): Promise<User> {
 //   await api.delete(`/notes/${id}`);
 // };
 
-// export const register = async (credentials: {
-//   email: string;
-//   password: string;
-// }) => {
-//   const { data } = await api.post<User>("/auth/register", credentials);
-//   return data;
-// };
+export const register = async (credentials: {
+  email: string;
+  password: string;
+}) => {
+  const { data } = await api.post<User>("/auth/register", credentials);
+  return data;
+};
 
 // export const login = async (payload: {
 //   email: string;
