@@ -5,20 +5,20 @@ import { useRouter } from "next/navigation";
 import { useMutation } from "@tanstack/react-query";
 import { login } from "@/lib/api/clientApi";
 import css from "./SignInPage.module.css";
+import { useAuthStore } from "@/lib/store/authStore";
+
 
 const SignInPage = () => {
   const router = useRouter();
   const [error, setError] = useState<string>("");
 
   const mutation = useMutation({
-    mutationFn: login,
-    onSuccess: () => {
-      router.push("/profile"); 
-    },
-    onError: () => {
-      setError("Invalid email or password");
-    },
-  });
+  mutationFn: login,
+  onSuccess: (user) => {
+    setUser(user);       
+    router.push("/profile");
+  },
+});
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -30,6 +30,10 @@ const SignInPage = () => {
     setError("");
     mutation.mutate({ email, password });
   };
+
+  const setUser = useAuthStore((state) => state.setUser);
+
+
 
   return (
     <main className={css.mainContent}>
@@ -75,3 +79,5 @@ const SignInPage = () => {
 };
 
 export default SignInPage;
+
+

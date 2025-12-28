@@ -5,6 +5,20 @@ import type { User } from "@/types/user";
 
 const baseURL = `${process.env.NEXT_PUBLIC_API_URL}/api`;
 
+
+export const checkServerSession = async () => {
+  const cookieStore = await cookies();
+
+  return axios.get(`${baseURL}/auth/session`, {
+    headers: {
+      Cookie: cookieStore.toString(),
+    },
+    withCredentials: true,
+  });
+};
+
+
+
 const createServerApi = async () => {
   const cookieStore = await cookies();
   const cookieHeader = cookieStore

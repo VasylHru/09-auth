@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import css from "./ProfilePage.module.css";
+import Link from "next/link";
+import Image from "next/image";
 
 export const metadata: Metadata = {
   title: "Profile | Auth App",
@@ -17,13 +19,13 @@ const ProfilePage = () => {
       <div className={css.profileCard}>
         <div className={css.header}>
           <h1 className={css.formTitle}>Profile Page</h1>
-          <a href="" className={css.editProfileButton}>
+          <Link href="/profile/edit" className={css.editProfileButton}>
             Edit Profile
-          </a>
+          </Link>
         </div>
 
         <div className={css.avatarWrapper}>
-          <img
+          <Image
             src="https://ac.goit.global/fullstack/react/avatar.png"
             alt="User Avatar"
             width={120}
