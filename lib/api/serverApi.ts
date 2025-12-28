@@ -77,13 +77,14 @@ export async function fetchNoteById(
   return response.data;
 }
 
-export async function getMe(cookies: string = ""): Promise<User> {
-  const headers = cookies ? { Cookie: cookies } : {};
-
-  const response = await api.get<User>("/users/me", { headers });
+export const getMe = async (cookieString: string): Promise<User> => {
+  const response = await api.get<User>("/users/me", {
+    headers: {
+      Cookie: cookieString, 
+    },
+  });
   return response.data;
-}
-
+};
 export async function checkSession(cookies: string = ""): Promise<boolean> {
   const headers = cookies ? { Cookie: cookies } : {};
 
