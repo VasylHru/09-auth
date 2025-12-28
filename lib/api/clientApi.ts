@@ -30,6 +30,7 @@ export interface LoginParams {
 }
 
 export interface UpdateMeParams {
+  username?: string;
   name?: string;
   email?: string;
   password?: string;
