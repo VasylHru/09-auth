@@ -4,6 +4,13 @@ import Link from "next/link";
 import Image from "next/image";
 import { getMe } from "@/lib/api/serverApi";
 
+
+
+
+export const dynamic = "force-dynamic";
+
+
+
 export const metadata: Metadata = {
   title: "Profile",
   description: "User profile page",
@@ -15,11 +22,8 @@ export const metadata: Metadata = {
 };
 
 const Profile = async () => {
+  const user = await getMe();
 
-const user = await getMe();
-
-
-  
   return (
     <main className={css.mainContent}>
       <div className={css.profileCard}>
@@ -41,7 +45,7 @@ const user = await getMe();
         </div>
 
         <div className={css.profileInfo}>
-         <p>Username: {user.username}</p>
+          <p>Username: {user.username}</p>
           <p>Email: {user.email}</p>
         </div>
       </div>
