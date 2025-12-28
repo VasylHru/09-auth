@@ -2,8 +2,6 @@ import { api } from "./api";
 import type { Note, NoteTag } from "@/types/note";
 import type { User } from "@/types/user";
 
-
-
 export interface CreateNoteParams {
   title: string;
   content: string;
@@ -21,7 +19,6 @@ export interface DeleteNoteResponse {
 }
 
 export interface RegisterParams {
-  name?: string;
   email: string;
   password: string;
 }
@@ -36,7 +33,6 @@ export interface UpdateMeParams {
   email?: string;
   password?: string;
 }
-
 
 export async function fetchNotes(
   page: number,

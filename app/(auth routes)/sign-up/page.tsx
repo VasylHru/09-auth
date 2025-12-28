@@ -24,11 +24,10 @@ const SignUpPage = () => {
     e.preventDefault();
 
     const formData = new FormData(e.currentTarget);
-
     const email = formData.get("email") as string;
     const password = formData.get("password") as string;
 
-    mutation.mutate({ email, password });
+    mutation.mutate({  email, password });
   };
 
   return (
