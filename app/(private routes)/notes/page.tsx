@@ -4,7 +4,6 @@ import {
   dehydrate,
 } from "@tanstack/react-query";
 
-
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -12,10 +11,7 @@ export const metadata: Metadata = {
   description: "Browse and manage your notes",
 };
 
-
-
-
-import { fetchNotes } from "@/lib/api";
+import { fetchNotes } from "@/lib/api/serverApi";
 import NotesClient from "./filter/[...slug]/Notes.client";
 export default async function NotesPage() {
   const queryClient = new QueryClient();
