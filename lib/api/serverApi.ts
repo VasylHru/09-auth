@@ -6,6 +6,8 @@ import type { User } from "@/types/user";
 const baseURL = `${process.env.NEXT_PUBLIC_API_URL}/api`;
 
 
+
+
 export const checkServerSession = async () => {
   const cookieStore = await cookies();
 
@@ -52,7 +54,7 @@ export const fetchNoteById = async (id: string) => {
 
 export const getMe = async () => {
   const api = await createServerApi();
-  const { data } = await api.get<User>("/users/me");
+  const { data } = await api.get<User>("/user/me");
   return data;
 };
 

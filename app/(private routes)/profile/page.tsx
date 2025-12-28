@@ -2,9 +2,10 @@ import type { Metadata } from "next";
 import css from "./ProfilePage.module.css";
 import Link from "next/link";
 import Image from "next/image";
+import { getMe } from "@/lib/api/serverApi";
 
 export const metadata: Metadata = {
-  title: "Profile | Auth App",
+  title: "Profile",
   description: "User profile page",
   openGraph: {
     title: "Profile",
@@ -13,7 +14,12 @@ export const metadata: Metadata = {
   },
 };
 
-const ProfilePage = () => {
+const Profile = async () => {
+
+const user = await getMe();
+
+
+  
   return (
     <main className={css.mainContent}>
       <div className={css.profileCard}>
@@ -26,7 +32,7 @@ const ProfilePage = () => {
 
         <div className={css.avatarWrapper}>
           <Image
-            src="https://ac.goit.global/fullstack/react/avatar.png"
+            src={user.avatar}
             alt="User Avatar"
             width={120}
             height={120}
@@ -35,12 +41,12 @@ const ProfilePage = () => {
         </div>
 
         <div className={css.profileInfo}>
-          <p>Username: your_username</p>
-          <p>Email: your_email@example.com</p>
+         <p>Username: {user.username}</p>
+          <p>Email: {user.email}</p>
         </div>
       </div>
     </main>
   );
 };
 
-export default ProfilePage;
+export default Profile;
