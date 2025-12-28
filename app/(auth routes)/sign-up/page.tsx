@@ -13,7 +13,7 @@ const SignUpPage = () => {
   const mutation = useMutation({
     mutationFn: register,
     onSuccess: () => {
-      router.push("/profile"); 
+      router.push("/profile");
     },
     onError: () => {
       setError("Registration failed");
@@ -24,10 +24,11 @@ const SignUpPage = () => {
     e.preventDefault();
 
     const formData = new FormData(e.currentTarget);
+    const name = formData.get("name") as string;
     const email = formData.get("email") as string;
     const password = formData.get("password") as string;
 
-    mutation.mutate({ email, password });
+    mutation.mutate({ name, email, password });
   };
 
   return (

@@ -1,5 +1,8 @@
 import axios from "axios";
 import { cookies } from "next/headers";
+import { api } from "./api";
+import type { Note } from "@/types/note";
+import type { User } from "@/types/user";
 
 const baseURL = `${process.env.NEXT_PUBLIC_API_URL}/api`;
 
@@ -14,9 +17,7 @@ export const checkServerSession = async () => {
   });
 };
 
-import { api } from "./api";
-import type { Note } from "@/types/note";
-import type { User } from "@/types/user";
+
 
 // const createServerApi = async () => {
 //   const cookieStore = await cookies();
