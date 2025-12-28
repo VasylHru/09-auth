@@ -53,11 +53,11 @@ export const checkSession = async () => {
 };
 
 export const getMe = async () => {
-  const { data } = await api.get<User>("/user/me");
+  const { data } = await api.get<User>("/users/me");
   return data;
 };
 
 export const updateMe = async (payload: Partial<User>) => {
-  const { data } = await api.patch<User>("/user/me", payload);
+  const { data } = await api.patch<User>("/users/me", payload);
   return data;
 };

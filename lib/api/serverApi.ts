@@ -54,7 +54,7 @@ export const fetchNoteById = async (id: string) => {
 
 export const getMe = async () => {
   const api = await createServerApi();
-  const { data } = await api.get<User>("/user/me");
+  const { data } = await api.get<User>("/users/me");
   return data;
 };
 
