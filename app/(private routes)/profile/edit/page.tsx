@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { updateMe } from '@/lib/api/clientApi';
 import Image from 'next/image';
-import css from './EditPage.module.css';
+import css from './EditProfilePage.module.css';
 import { useRouter } from 'next/navigation';
 import { useAuthStore } from '@/lib/store/authStore';
 
