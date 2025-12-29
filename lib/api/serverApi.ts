@@ -4,6 +4,7 @@ import { api } from "./api";
 import type { Note } from "@/types/note";
 import type { User } from "@/types/user";
 
+
 export async function checkServerSession(): Promise<AxiosResponse> {
   const cookieStore = await cookies();
 
@@ -57,24 +58,14 @@ export async function fetchNoteById(id: string): Promise<Note> {
   return response.data;
 }
 
-
-
-
-
-
-
 export async function getMe(): Promise<User> {
   const cookieStore = await cookies();
- 
-  const token = cookieStore.get("session")?.value;
-
-  const response = await api.get<User>("/auth/me", {
+  const { data } = await api.get<User>('/users/me', {
     headers: {
-      Authorization: `Bearer ${token}`,
+      Cookie: cookieStore.toString(),
     },
   });
-
-  return response.data;
+  return data;
 }
 
 export async function checkSession(): Promise<AxiosResponse> {
