@@ -46,7 +46,7 @@ export async function fetchNotes(
 }
 
 export async function fetchNoteById(id: string): Promise<Note> {
-  const cookieStore = await cookies();
+  const cookieStore = cookies();
 
   const response = await api.get<Note>(`/notes/${id}`, {
     headers: {
@@ -56,6 +56,12 @@ export async function fetchNoteById(id: string): Promise<Note> {
 
   return response.data;
 }
+
+
+
+
+
+
 
 export async function getMe(): Promise<User> {
   const cookieStore = await cookies();
