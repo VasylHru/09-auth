@@ -57,14 +57,18 @@ export async function fetchNoteById(id: string): Promise<Note> {
   return response.data;
 }
 
-export const getMe = async (cookieString: string): Promise<User> => {
+export async function getMe(): Promise<User> {
+  const cookieStore = await cookies();
+
   const response = await api.get<User>("/users/me", {
     headers: {
-      Cookie: cookieString,
+      Cookie: cookieStore.toString(),
     },
   });
+
   return response.data;
-};
+}
+
 export async function checkSession(): Promise<AxiosResponse> {
   return api.get("/auth/session");
 }
