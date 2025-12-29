@@ -2,17 +2,17 @@ import { NextRequest, NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { checkServerSession } from "./lib/api/serverApi";
 import { parse } from "cookie";
-
 const privateRoutes = ["/profile", "/notes"];
 const publicRoutes = ["/sign-in", "/sign-up"];
 
-export async function middleware(request: NextRequest) {
-  const { pathname } = request.nextUrl;
-  const cookieStore = await cookies();
+export async function proxy(request: NextRequest) {
 
+  const cookieStore = await cookies();
   const accessToken = cookieStore.get("accessToken")?.value;
   const refreshToken = cookieStore.get("refreshToken")?.value;
+  const { pathname } = request.nextUrl;
 
+  
   const isPublicRoute = publicRoutes.some((route) =>
     pathname.startsWith(route)
   );
