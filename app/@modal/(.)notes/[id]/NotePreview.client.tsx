@@ -4,6 +4,9 @@ import { useQuery } from "@tanstack/react-query";
 import { fetchNoteById } from "@/lib/api/clientApi";
 import { useRouter } from "next/navigation";
 import css from "@/components/NotePreview/NotePreview.module.css";
+import Modal from "@/components/Modal/Modal";
+
+
 
 export default function NotePreview({ id }: { id: string }) {
   const router = useRouter();
@@ -14,11 +17,17 @@ export default function NotePreview({ id }: { id: string }) {
     staleTime: 1000 * 60 * 5,
   });
 
+
+const handleClose = () => {
+    router.back();
+  };
+
   if (!data && !isError) return <p className={css.loading}>Loading...</p>;
 
   if (isError) return <p className={css.error}>Error loading note</p>;
 
   return (
+    <Modal onClose={handleClose}>
     <div className={css.modalContent}>
       <button className={css.closeButton} onClick={() => router.back()}>
         ✕
@@ -36,5 +45,6 @@ export default function NotePreview({ id }: { id: string }) {
         Created: {new Date(data.createdAt).toLocaleDateString()}
       </p>
     </div>
+    </Modal>
   );
 }
