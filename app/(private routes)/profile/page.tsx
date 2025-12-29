@@ -7,7 +7,7 @@ import { getMe } from "@/lib/api/serverApi";
 
 
 
-export const dynamic = "force-dynamic";
+
 
 
 
