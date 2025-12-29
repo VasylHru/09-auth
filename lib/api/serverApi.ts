@@ -59,10 +59,12 @@ export async function fetchNoteById(id: string): Promise<Note> {
 
 export async function getMe(): Promise<User> {
   const cookieStore = await cookies();
+ 
+  const token = cookieStore.get("session")?.value;
 
-  const response = await api.get<User>("/users/me", {
+  const response = await api.get<User>("/auth/me", {
     headers: {
-      Cookie: cookieStore.toString(),
+      Authorization: `Bearer ${token}`,
     },
   });
 
