@@ -19,7 +19,6 @@ export interface DeleteNoteResponse {
 }
 
 export interface RegisterParams {
-  name?:string ;
   email: string;
   password: string;
 }
@@ -78,6 +77,30 @@ export async function register(data: RegisterParams): Promise<User> {
   return response.data;
 }
 
+export async function login(payload: LoginParams): Promise<User> {
+  const { data } = await api.post<User>("/auth/login", payload);
+  return data;
+}
+
+export async function logout(): Promise<void> {
+  await api.post("/auth/logout");
+}
+
+export async function checkSession(): Promise<{ isAuth: boolean }> {
+  const { data } = await api.get<{ isAuth: boolean }>("/auth/session");
+  return data;
+}
+
+export async function getMe(): Promise<User> {
+  const { data } = await api.get<User>("/users/me");
+  return data;
+}
+
+
+export async function updateMe(payload: UpdateMeParams): Promise<User> {
+  const { data } = await api.patch<User>("/users/me", payload);
+  return data;
+}
 
 // export const fetchNotes = async () => {
 //   const { data } = await api.get<Note[]>("/notes");
@@ -105,30 +128,3 @@ export async function register(data: RegisterParams): Promise<User> {
 //   const { data } = await api.post<User>("/auth/register", credentials);
 //   return data;
 // };
-
-export const login = async (payload: {
-  email: string;
-  password: string;
-}) => {
-  const { data } = await api.post<User>("/auth/login", payload);
-  return data;
-};
-
-export const logout = async () => {
-  await api.post("/auth/logout");
-};
-
-export const checkSession = async () => {
-  const { data } = await api.get<{ isAuth: boolean }>("/auth/session");
-  return data;
-};
-
-export const getMe = async () => {
-  const { data } = await api.get<User>("/users/me");
-  return data;
-};
-
-export const updateMe = async (payload: Partial<User>) => {
-  const { data } = await api.patch<User>("/users/me", payload);
-  return data;
-};

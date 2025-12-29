@@ -27,43 +27,40 @@ export async function middleware(request: NextRequest) {
     return NextResponse.next();
   }
 
-  if (refreshToken) {
-    try {
-      const data = await checkServerSession();
-      const setCookie = data.headers["set-cookie"];
+if (refreshToken) {
+  try {
+    const data = await checkServerSession();
+    const setCookie = data.headers["set-cookie"];
 
-      if (setCookie) {
-        const response = NextResponse.next();
-        const cookiesArr = Array.isArray(setCookie) ? setCookie : [setCookie];
+    if (setCookie) {
+      const cookiesArr = Array.isArray(setCookie) ? setCookie : [setCookie];
 
-        for (const cookieStr of cookiesArr) {
-          const parsed = parse(cookieStr);
+      const response = isPublicRoute
+        ? NextResponse.redirect(new URL("/", request.url))
+        : NextResponse.next();
 
-          if (parsed.accessToken) {
-            response.cookies.set("accessToken", parsed.accessToken, {
-              path: "/",
-              maxAge: Number(parsed["Max-Age"]),
-            });
-          }
+      for (const cookieStr of cookiesArr) {
+        const parsed = parse(cookieStr);
 
-          if (parsed.refreshToken) {
-            response.cookies.set("refreshToken", parsed.refreshToken, {
-              path: "/",
-              maxAge: Number(parsed["Max-Age"]),
-            });
-          }
+        if (parsed.accessToken) {
+          response.cookies.set("accessToken", parsed.accessToken, {
+            path: "/",
+            maxAge: Number(parsed["Max-Age"]),
+          });
         }
 
-        if (isPublicRoute) {
-          return NextResponse.redirect(new URL("/", request.url), response);
-        }
-
-        if (isPrivateRoute) {
-          return response;
+        if (parsed.refreshToken) {
+          response.cookies.set("refreshToken", parsed.refreshToken, {
+            path: "/",
+            maxAge: Number(parsed["Max-Age"]),
+          });
         }
       }
-    } catch {}
-  }
+
+      return response;
+    }
+  } catch {}
+}
 
   if (isPrivateRoute) {
     return NextResponse.redirect(new URL("/sign-in", request.url));
