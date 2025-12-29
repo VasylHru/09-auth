@@ -6,13 +6,11 @@ const privateRoutes = ["/profile", "/notes"];
 const publicRoutes = ["/sign-in", "/sign-up"];
 
 export async function proxy(request: NextRequest) {
-
   const cookieStore = await cookies();
   const accessToken = cookieStore.get("accessToken")?.value;
   const refreshToken = cookieStore.get("refreshToken")?.value;
   const { pathname } = request.nextUrl;
 
-  
   const isPublicRoute = publicRoutes.some((route) =>
     pathname.startsWith(route)
   );
@@ -27,40 +25,40 @@ export async function proxy(request: NextRequest) {
     return NextResponse.next();
   }
 
-if (refreshToken) {
-  try {
-    const data = await checkServerSession();
-    const setCookie = data.headers["set-cookie"];
+  if (refreshToken) {
+    try {
+      const data = await checkServerSession();
+      const setCookie = data.headers["set-cookie"];
 
-    if (setCookie) {
-      const cookiesArr = Array.isArray(setCookie) ? setCookie : [setCookie];
+      if (setCookie) {
+        const cookiesArr = Array.isArray(setCookie) ? setCookie : [setCookie];
 
-      const response = isPublicRoute
-        ? NextResponse.redirect(new URL("/", request.url))
-        : NextResponse.next();
+        const response = isPublicRoute
+          ? NextResponse.redirect(new URL("/", request.url))
+          : NextResponse.next();
 
-      for (const cookieStr of cookiesArr) {
-        const parsed = parse(cookieStr);
+        for (const cookieStr of cookiesArr) {
+          const parsed = parse(cookieStr);
 
-        if (parsed.accessToken) {
-          response.cookies.set("accessToken", parsed.accessToken, {
-            path: "/",
-            maxAge: Number(parsed["Max-Age"]),
-          });
+          if (parsed.accessToken) {
+            response.cookies.set("accessToken", parsed.accessToken, {
+              path: "/",
+              maxAge: Number(parsed["Max-Age"]),
+            });
+          }
+
+          if (parsed.refreshToken) {
+            response.cookies.set("refreshToken", parsed.refreshToken, {
+              path: "/",
+              maxAge: Number(parsed["Max-Age"]),
+            });
+          }
         }
 
-        if (parsed.refreshToken) {
-          response.cookies.set("refreshToken", parsed.refreshToken, {
-            path: "/",
-            maxAge: Number(parsed["Max-Age"]),
-          });
-        }
+        return response;
       }
-
-      return response;
-    }
-  } catch {}
-}
+    } catch {}
+  }
 
   if (isPrivateRoute) {
     return NextResponse.redirect(new URL("/sign-in", request.url));
