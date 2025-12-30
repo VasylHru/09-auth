@@ -41,7 +41,9 @@ export async function proxy(request: NextRequest) {
       }
 
       return response;
-    } catch {
+    } catch (error) {
+      console.error("checkServerSession failed", error);
+
       if (isPrivateRoute) {
         return NextResponse.redirect(new URL("/sign-in", request.url));
       }
