@@ -1,22 +1,20 @@
-import { AxiosResponse } from "axios";
+
 import { cookies } from "next/headers";
 import { api } from "./api";
 import type { Note } from "@/types/note";
 import type { User } from "@/types/user";
 
 
-export async function checkServerSession(): Promise<AxiosResponse> {
-  const cookieStore = await cookies();
 
-  return api.get("/auth/session", {
-    headers: {
+export const checkServerSession = async () => {
+  const cookieStore = await cookies();
+  const res = await api.get('/auth/session', {
+    headers: { 
       Cookie: cookieStore.toString(),
     },
-    withCredentials: true,
-    
   });
-  
-}
+  return res;
+};
 
 export interface FetchNotesResponse {
   notes: Note[];
