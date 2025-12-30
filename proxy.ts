@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { cookies } from "next/headers";
-import { checkServerSession } from "./lib/api/serverApi";
-import { parse } from "cookie";
+import { checkSession } from "./lib/api/serverApi";
 const privateRoutes = ["/profile", "/notes"];
 const publicRoutes = ["/sign-in", "/sign-up"];
 
@@ -24,40 +23,29 @@ export async function proxy(request: NextRequest) {
     }
     return NextResponse.next();
   }
-
   if (refreshToken) {
     try {
-      const data = await checkServerSession();
+      const data = await checkSession();
       const setCookie = data.headers["set-cookie"];
+
+      const response = isPublicRoute
+        ? NextResponse.redirect(new URL("/", request.url))
+        : NextResponse.next();
 
       if (setCookie) {
         const cookiesArr = Array.isArray(setCookie) ? setCookie : [setCookie];
 
-        const response = isPublicRoute
-          ? NextResponse.redirect(new URL("/", request.url))
-          : NextResponse.next();
-
-        for (const cookieStr of cookiesArr) {
-          const parsed = parse(cookieStr);
-
-          if (parsed.accessToken) {
-            response.cookies.set("accessToken", parsed.accessToken, {
-              path: "/",
-              maxAge: Number(parsed["Max-Age"]),
-            });
-          }
-
-          if (parsed.refreshToken) {
-            response.cookies.set("refreshToken", parsed.refreshToken, {
-              path: "/",
-              maxAge: Number(parsed["Max-Age"]),
-            });
-          }
-        }
-
-        return response;
+        cookiesArr.forEach((cookie) =>
+          response.headers.append("Set-Cookie", cookie)
+        );
       }
-    } catch {}
+
+      return response;
+    } catch {
+      if (isPrivateRoute) {
+        return NextResponse.redirect(new URL("/sign-in", request.url));
+      }
+    }
   }
 
   if (isPrivateRoute) {
@@ -68,5 +56,5 @@ export async function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/profile/:path*", "/notes/:path*", "/sign-in", "/sign-up", ],
+  matcher: ["/profile/:path*", "/notes/:path*", "/sign-in", "/sign-up"],
 };

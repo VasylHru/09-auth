@@ -4,18 +4,6 @@ import { api } from "./api";
 import type { Note } from "@/types/note";
 import type { User } from "@/types/user";
 
-
-export async function checkServerSession(): Promise<AxiosResponse> {
-  const cookieStore = await cookies();
-
-  return api.get("/auth/session", {
-    headers: {
-      Cookie: cookieStore.toString(),
-    },
-    withCredentials: true,
-  });
-}
-
 export interface FetchNotesResponse {
   notes: Note[];
   totalPages: number;
@@ -47,7 +35,7 @@ export async function fetchNotes(
 }
 
 export async function fetchNoteById(id: string): Promise<Note> {
-  const cookieStore = cookies();
+  const cookieStore = await cookies();
 
   const response = await api.get<Note>(`/notes/${id}`, {
     headers: {
@@ -69,5 +57,12 @@ export async function getMe(): Promise<User> {
 }
 
 export async function checkSession(): Promise<AxiosResponse> {
-  return api.get("/auth/session");
+  const cookieStore = await cookies();
+
+  return api.get("/auth/session", {
+    headers: {
+      Cookie: cookieStore.toString(),
+    },
+    withCredentials: true,
+  });
 }
