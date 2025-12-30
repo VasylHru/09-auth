@@ -32,11 +32,9 @@ export async function proxy(request: NextRequest) {
         throw new Error("Session refresh failed: no new cookies provided");
       }
       const response = isPublicRoute
-
         ? NextResponse.redirect(new URL("/", request.url))
         : NextResponse.next();
 
-        
       const cookiesArr = Array.isArray(setCookie) ? setCookie : [setCookie];
       cookiesArr.forEach((cookie) => {
         response.headers.append("Set-Cookie", cookie);
@@ -54,7 +52,6 @@ export async function proxy(request: NextRequest) {
     }
   }
 }
-
 
 export const config = {
   matcher: ["/profile/:path*", "/notes/:path*", "/sign-in", "/sign-up"],

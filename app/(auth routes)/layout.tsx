@@ -1,13 +1,13 @@
-"use client";
+'use client';
 
-import { useEffect, type ReactNode } from "react";
-import { useRouter } from "next/navigation";
+import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 
 type Props = {
-  children: ReactNode;
+  children: React.ReactNode;
 };
 
-export default function AuthLayout({ children }: Props) {
+export default function PublicLayout({ children }: Props) {
   const router = useRouter();
 
   useEffect(() => {
