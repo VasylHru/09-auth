@@ -86,7 +86,7 @@ export async function logout(): Promise<void> {
   await api.post("/auth/logout");
 }
 
-export async function checkSession(): Promise<{ isAuth: boolean }> {
+export async function checkServerSession(): Promise<{ isAuth: boolean }> {
   const { data } = await api.get<{ isAuth: boolean }>("/auth/session");
   return data;
 }
