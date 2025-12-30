@@ -27,42 +27,25 @@ export async function proxy(request: NextRequest) {
     try {
       const data = await checkServerSession();
       const setCookie = data.headers["set-cookie"];
-
       const response = isPublicRoute
         ? NextResponse.redirect(new URL("/", request.url))
         : NextResponse.next();
-
       if (setCookie) {
         const cookiesArr = Array.isArray(setCookie) ? setCookie : [setCookie];
-
-        cookiesArr.forEach((cookie) =>
-          response.headers.append("Set-Cookie", cookie)
-        );
+        cookiesArr.forEach((cookie) => {
+          response.headers.append("Set-Cookie", cookie);
+        });
       }
-
       return response;
     } catch (error) {
       console.error("checkServerSession failed", error);
-
-      if (isPrivateRoute) {
-        return NextResponse.redirect(new URL("/sign-in", request.url));
-      }
+      return isPrivateRoute
+        ? NextResponse.redirect(new URL("/sign-in", request.url))
+        : NextResponse.next();
     }
   }
-
-  if (isPrivateRoute) {
-    return NextResponse.redirect(new URL("/sign-in", request.url));
-  }
-
-  return NextResponse.next();
 }
 
 export const config = {
-  matcher: [
-    "/profile/:path*",
-    "/notes/:path*",
-    "/sign-in",
-    "/sign-up",
-    "/api/:path*",
-  ],
+  matcher: ["/profile/:path*", "/notes/:path*", "/sign-in", "/sign-up"],
 };
