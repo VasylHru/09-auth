@@ -7,7 +7,7 @@ type Props = {
   children: React.ReactNode;
 };
 
-export default function PublicLayout({ children }: Props) {
+export default function AuthLayout({ children }: Props) {
   const router = useRouter();
 
   useEffect(() => {

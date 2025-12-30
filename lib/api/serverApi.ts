@@ -8,13 +8,16 @@ import type { User } from "@/types/user";
 
 export const checkServerSession = async () => {
   const cookieStore = await cookies();
-  const res = await api.get('/auth/session', {
-    headers: { 
-      Cookie: cookieStore.toString(),
+  const cookieHeader = cookieStore.toString(); 
+  return await api.get("/auth/session", {
+    headers: {
+      Cookie: cookieHeader,
     },
+    withCredentials: true,
   });
-  return res;
 };
+
+
 
 export interface FetchNotesResponse {
   notes: Note[];
@@ -64,6 +67,7 @@ export async function getMe(): Promise<User> {
     headers: {
       Cookie: cookieStore.toString(),
     },
+    withCredentials: true,
   });
   return data;
 }
