@@ -101,30 +101,3 @@ export async function updateMe(payload: UpdateMeParams): Promise<User> {
   const { data } = await api.patch<User>("/users/me", payload);
   return data;
 }
-
-// export const fetchNotes = async () => {
-//   const { data } = await api.get<Note[]>("/notes");
-//   return data;
-// };
-
-// export const fetchNoteById = async (id: string) => {
-//   const { data } = await api.get<Note>(`/notes/${id}`);
-//   return data;
-// };
-
-// export const createNote = async (payload: Partial<Note>) => {
-//   const { data } = await api.post<Note>("/notes", payload);
-//   return data;
-// };
-
-// export const deleteNote = async (id: string) => {
-//   await api.delete(`/notes/${id}`);
-// };
-
-// export const register = async (credentials: {
-//   email: string;
-//   password: string;
-// }) => {
-//   const { data } = await api.post<User>("/auth/register", credentials);
-//   return data;
-// };

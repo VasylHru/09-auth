@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { cookies } from "next/headers";
-import { checkSession } from "./lib/api/serverApi";
+import { checkServerSession } from "./lib/api/serverApi";
 const privateRoutes = ["/profile", "/notes"];
 const publicRoutes = ["/sign-in", "/sign-up"];
 
@@ -25,7 +25,7 @@ export async function proxy(request: NextRequest) {
   }
   if (refreshToken) {
     try {
-      const data = await checkSession();
+      const data = await checkServerSession();
       const setCookie = data.headers["set-cookie"];
 
       const response = isPublicRoute
