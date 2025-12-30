@@ -32,15 +32,20 @@ export async function proxy(request: NextRequest) {
         throw new Error("Session refresh failed: no new cookies provided");
       }
       const response = isPublicRoute
+
         ? NextResponse.redirect(new URL("/", request.url))
         : NextResponse.next();
+
+        
       const cookiesArr = Array.isArray(setCookie) ? setCookie : [setCookie];
       cookiesArr.forEach((cookie) => {
         response.headers.append("Set-Cookie", cookie);
       });
+
       return response;
     } catch (error) {
       console.error("checkServerSession failed", error);
+
       if (isPrivateRoute) {
         return NextResponse.redirect(new URL("/sign-in", request.url));
       } else {
@@ -48,13 +53,8 @@ export async function proxy(request: NextRequest) {
       }
     }
   }
-
-  if (isPrivateRoute) {
-    return NextResponse.redirect(new URL("/sign-in", request.url));
-  } else {
-    return NextResponse.next();
-  }
 }
+
 
 export const config = {
   matcher: ["/profile/:path*", "/notes/:path*", "/sign-in", "/sign-up"],
