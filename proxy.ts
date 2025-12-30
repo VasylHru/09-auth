@@ -23,26 +23,36 @@ export async function proxy(request: NextRequest) {
     }
     return NextResponse.next();
   }
+
   if (refreshToken) {
     try {
       const data = await checkServerSession();
       const setCookie = data.headers["set-cookie"];
+      if (!setCookie) {
+        throw new Error("Session refresh failed: no new cookies provided");
+      }
       const response = isPublicRoute
         ? NextResponse.redirect(new URL("/", request.url))
         : NextResponse.next();
-      if (setCookie) {
-        const cookiesArr = Array.isArray(setCookie) ? setCookie : [setCookie];
-        cookiesArr.forEach((cookie) => {
-          response.headers.append("Set-Cookie", cookie);
-        });
-      }
+      const cookiesArr = Array.isArray(setCookie) ? setCookie : [setCookie];
+      cookiesArr.forEach((cookie) => {
+        response.headers.append("Set-Cookie", cookie);
+      });
       return response;
     } catch (error) {
       console.error("checkServerSession failed", error);
-      return isPrivateRoute
-        ? NextResponse.redirect(new URL("/sign-in", request.url))
-        : NextResponse.next();
+      if (isPrivateRoute) {
+        return NextResponse.redirect(new URL("/sign-in", request.url));
+      } else {
+        return NextResponse.next();
+      }
     }
+  }
+
+  if (isPrivateRoute) {
+    return NextResponse.redirect(new URL("/sign-in", request.url));
+  } else {
+    return NextResponse.next();
   }
 }
 

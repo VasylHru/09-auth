@@ -13,7 +13,9 @@ export async function checkServerSession(): Promise<AxiosResponse> {
       Cookie: cookieStore.toString(),
     },
     withCredentials: true,
+    
   });
+  
 }
 
 export interface FetchNotesResponse {
