@@ -86,10 +86,14 @@ export async function logout(): Promise<void> {
   await api.post("/auth/logout");
 }
 
-export async function checkServerSession(): Promise<{ isAuth: boolean }> {
-  const { data } = await api.get<{ isAuth: boolean }>("/auth/session");
-  return data;
-}
+type CheckSessionRequest = {
+  success: boolean;
+};
+
+export const checkServerSession = async () => {
+  const res = await api.get<CheckSessionRequest>('/auth/session');
+  return res.data.success;
+};
 
 export async function getMe(): Promise<User> {
   const { data } = await api.get<User>("/users/me");
